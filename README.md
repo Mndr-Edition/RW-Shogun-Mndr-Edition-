@@ -1,5 +1,1035 @@
-# RW-Shogun-Mndr-Edition-
-Global overhaul mod for Rusted Warfare set in Sengoku Jidai.
-[Follow the development on ModDB](https://www.moddb.com/mods/shogun-warfare-mndr-edition)
-<img width="1280" height="591" alt="IMG_20260423_165656_224" src="https://github.com/user-attachments/assets/94a92aeb-7d6a-42f2-bec3-5529ff9f6b1e" />
-<img width="1280" height="591" alt="IMG_20260426_235513_349" src="https://github.com/user-attachments/assets/87ffdeff-29c0-4517-95c6-28cd79b63438" />
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+    --bg: #0d0d0d;
+    --sidebar-bg: #151515;
+    --accent: #1a1a1a;
+    --blue: #3498db;
+    --text: #e0e0e0;
+    --card-bg: #1a1a1a;
+    --border: rgba(255,255,255,0.08);
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg);
+    display: flex;
+    height: 100vh;
+    color: var(--text);
+}
+
+.sidebar {
+    width: 300px;
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(0,0,0,0.05);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.02);
+}
+
+.mod-info {
+    background: var(--accent);
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.mod-info b { color: #fab1a0; display: block; font-size: 16px; margin-bottom: 5px; }
+
+.mod-info-content {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
+}
+
+.mod-info-content.active {
+    max-height: 1000px;
+    opacity: 1;
+    margin-bottom: 15px;
+}
+
+.toggle-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px;
+    margin-top: 10px;
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(52, 152, 219, 0.1);
+    border-radius: 6px;
+    transition: 0.2s;
+    user-select: none;
+}
+
+.toggle-arrow:hover {
+    background: rgba(52, 152, 219, 0.2);
+}
+
+.version-badge {
+    display: inline-block;
+    background: var(--blue);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.search-box { 
+    margin-bottom: 5px; 
+    position: relative; 
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 15px 12px 35px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #222;
+    color: white;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.search-box input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+}
+
+.search-box::before {
+    content: '🔍';
+    position: absolute;
+    left: 12px;
+    top: 11px;
+    font-size: 14px;
+    opacity: 0.5;
+}
+
+.nav-menu { flex-grow: 1; }
+
+.nav-item {
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    font-weight: 500;
+    color: #636e72;
+    transform: translateX(0);
+}
+
+.nav-item.active { 
+    background: var(--blue); 
+    color: white; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transform: translateX(8px); 
+}
+
+.nav-item:hover { background: rgba(0,0,0,0.03); }
+
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.log-entry {
+    width: 100%;
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    box-sizing: border-box;
+    animation: slideUp 0.4s ease-out;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.log-entry:first-of-type {
+    border-radius: 12px 12px 0 0;
+}
+
+.log-entry:last-of-type {
+    border-radius: 0 0 12px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.log-entry:only-of-type {
+    border-radius: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.log-entry:hover {
+    z-index: 10;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    border-color: var(--blue);
+    border-bottom: 1px solid var(--blue);
+}
+
+.typing::after {
+    content: '|';
+    animation: blink 0.7s infinite;
+    margin-left: 2px;
+    color: var(--blue);
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tag {
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    background: #dfe6e9;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-right: 5px;
+    color: #2d3436;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.tag:hover {
+    background: var(--blue);
+    color: white;
+}
+
+h2 { margin: 10px 0; font-size: 18px; }
+
+p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.5em; }
+
+.log-entry.hidden { 
+    display: none; 
+}
+
+#guideMenu.hidden { 
+    opacity: 0; 
+    visibility: hidden; 
+    transform: translateY(-10px); 
+    pointer-events: none;
+}
+
+#guideMenu {
+    position: absolute; 
+    top: 185px; 
+    left: 20px; 
+    width: 260px; 
+    background: #111 !important; 
+    border-radius: 12px; 
+    z-index: 1000; 
+    padding: 12px; 
+    border: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+}
+
+#guideMenu::before,
+#guideMenu::after {
+    content: '';
+    position: absolute;
+    inset: 0px;       
+    border-radius: 12px;
+    padding: 1px;      
+    background: conic-gradient(from var(--angle), #fff 0deg, var(--blue) 20deg, transparent 90deg);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: rotateAngle 3s linear infinite;
+    pointer-events: none;
+    z-index: 5;        
+}
+
+#guideMenu::after {
+    background: conic-gradient(from calc(var(--angle) + 180deg), #fff 0deg, var(--blue) 20deg, transparent 90deg);
+}
+
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes rotateAngle {
+    0% { --angle: 0deg; }
+    100% { --angle: 360deg; }
+}
+
+#guideMenu .guide-header { 
+    color: #555; 
+    font-size: 10px; 
+    text-transform: uppercase; 
+    font-weight: 900; 
+    margin-bottom: 8px; 
+    padding-left: 10px;
+}
+
+#guideMenu .nav-item { 
+    color: #777 !important; 
+    background: transparent !important;
+}
+
+#guideMenu .nav-item.active { 
+    color: #fff !important; 
+    background: var(--blue) !important;
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+}
+
+@media (max-width: 768px) {
+    body { flex-direction: column; overflow: visible; }
+    .sidebar { width: 100%; height: auto; box-sizing: border-box; position: sticky; top: 0; z-index: 100; }
+    .content { padding: 15px; overflow: visible; }
+    .nav-menu { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 5px; }
+    .nav-item { white-space: nowrap; margin: 0; }
+}
+
+.tag-ai { background: #f1c40f !important; color: #000 !important; }
+.tag-sfx { background: #e67e22 !important; color: #fff !important; }
+.tag-vfx { background: #9b59b6 !important; color: #fff !important; }
+.tag-logic { background: #2ecc71 !important; color: #fff !important; }
+.tag-economic { background: #27ae60 !important; color: #fff !important; }
+.tag-ui { background: #34495e !important; color: #fff !important; }
+.tag-battle { background: #e74c3c !important; color: #fff !important; }
+.tag-ship { background: #2980b9 !important; color: #fff !important; }
+.tag-building { background: #7f8c8d !important; color: #fff !important; }
+.tag-major { background: #c0392b !important; color: #fff !important; box-shadow: 0 0 10px rgba(192, 57, 43, 0.5) !important; }
+
+.log-entry.major {
+    border-left: 4px solid #e74c3c;
+    background: linear-gradient(90deg, rgba(231, 76, 60, 0.05) 0%, #1a1a1a 100%);
+}
+
+.log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5px;
+}
+
+.entry-date {
+    font-size: 11px;
+    color: #555;
+    font-family: monospace;
+    font-weight: 600;
+}
+
+::-webkit-scrollbar {width: 6px;}
+::-webkit-scrollbar-track {background: var(--bg);}
+::-webkit-scrollbar-thumb {background: #333; border-radius: 10px;}
+::-webkit-scrollbar-thumb:hover {background: var(--blue);}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #2ecc71;
+    margin-bottom: 10px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background: #2ecc71;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #2ecc71;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {transform: scale(1); opacity: 1;}
+    50% {transform: scale(1.2); opacity: 0.5;}
+    100% {transform: scale(1); opacity: 1;}
+}
+
+.search-highlight {
+    background: rgba(52, 152, 219, 0.3);
+    color: #fff;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="mod-info" style="padding: 15px;">
+        <div id="infoContent" class="mod-info-content">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">               
+                <div>
+                    <b style="margin: 0; font-size: 18px; letter-spacing: -0.5px;">RW: SHOGUN</b>
+                    
+                    <span style="opacity: 0.5; font-size: 10px; display: block; margin-top: -2px;">MNDR Edition © 2026</span>
+                </div>
+                <div class="version-badge" style="margin: 0; font-size: 10px;">v5.0</div>
+            </div>
+
+            <div style="display: flex; gap: 5px; margin-bottom: 12px; margin-top: 8px;">
+                <span style="color: #fab1a0; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(250, 177, 160, 0.3); padding: 1px 5px; border-radius: 3px; font-weight: 800;">Global Overhaul</span>
+                <span style="color: #3498db; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(52, 152, 219, 0.3); padding: 1px 5px; border-radius: 3px; font-weight: 800;">Refactoring</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);">                                   
+                <div>
+             <div style="grid-column: span 2; margin-bottom: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);">
+    <span style="font-size: 10px; opacity: 0.7; display: block; margin-bottom: 5px;">ПРЯМАЯ ССЫЛКА НА МОД:</span>
+    <a href="https://www.moddb.com/mods/shogun-warfare-mndr-edition" target="_blank" style="color: #3498db; text-decoration: none; font-size: 11px; word-break: break-all; transition: 0.2s; border-bottom: 1px dashed rgba(52, 152, 219, 0.4);">
+        https://www.moddb.com/mods/shogun-warfare-mndr-edition
+    </a>
+</div>                
+                </div>
+            </div>        
+
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; font-size: 9px; margin-bottom: 4px; font-weight: 700; opacity: 0.8;">
+                    <span>SYSTEM OVERHAUL</span>
+                    <span>100%</span>
+                </div>
+                <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                    <div style="width: 100%; height: 100%; background: #fab1a0; box-shadow: 0 0 10px rgba(250, 177, 160, 0.3); border-radius: 10px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="guideBtn" style="display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--blue); color: white; padding: 8px; border-radius: 6px; font-size: 11px; font-weight: 700; transition: 0.2s; box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);">
+            <span>Открыть навигатор разделов</span>
+        </div>
+
+        <div id="toggleInfo" class="toggle-arrow">Открыть статистику</div>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="smartSearch" placeholder="Поиск (VFX, AI, Код, Манифест)..." style="padding-right: 110px;">
+        <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 8px; pointer-events: none;">
+            <span id="searchCount" style="font-size: 11px; color: #636e72; white-space: nowrap;"></span>
+            <button id="clearSearch" style="background: none; border: none; color: #555; cursor: pointer; font-size: 20px; display: none; outline: none; pointer-events: auto; padding: 0;">×</button>
+        </div>
+    </div>
+    
+   <div id="guideMenu" class="hidden" style="position: absolute; top: 115px; left: 20px; width: 260px; z-index: 1000;">
+    <div class="guide-header">Навигатор по Shogun</div>
+    <div class="nav-menu">
+        <div class="nav-item active" data-filter="all">📂 Все правки</div>
+        <div class="nav-item" data-filter="major">🔥 Главное (Major)</div>
+        <div class="nav-item" data-filter="ai">🧠 Логика ИИ</div>
+        <div class="nav-item" data-filter="vfx">✨ Визуал / VFX</div>
+        <div class="nav-item" data-filter="hero">🏯 Герои</div>
+        <div class="nav-item" data-filter="economic">💰 Экономика</div>
+        <div class="nav-item" data-filter="ship">⚓ Флот</div>
+        <div class="nav-item" data-filter="logic">⚙️ Системный код</div>
+    </div>
+</div>
+
+<!-- КАРТОЧКА: МАНИФЕСТ РАЗРАБОТЧИКА (HIDDEN BY DEFAULT) -->
+<div class="log-entry hidden-manifest" data-tags="manifest secret secret-tag" data-date="10.05.2026" style="display: none; border-left: 4px solid #7209b7; background: #140a1d;">
+    <div class="log-header">
+        <div>
+            <span class="tag" style="background: #7209b7; color: #fff;">MANIFEST</span>
+            <span class="tag" style="background: #ef233c; color: #fff;">MNDR</span>
+        </div>
+        <div class="entry-date">TOP SECRET</div>
+    </div>
+    <h2 style="color: #ffb703;">Манифест Разработчика</h2>
+    <div style="font-size: 13px; line-height: 1.6;">
+        <div style="border-left: 3px solid #ef233c; padding-left: 10px; margin-bottom: 15px; font-style: italic;">
+            «Юнит без уникальной механики — это просто бесполезный спрайт. Мы вырезали всё лишнее, чтобы оставить только то, что заставляет ИИ потеть, а игрока — думать.»
+        </div>
+        <div style="border-left: 3px solid #ffb703; padding-left: 10px; margin-bottom: 15px;">
+            «Я люблю бассы пиздец... Единственное, что имеет значение — это ваш опыт и удовольствие от игры. Наслаждайтесь моментом, остальное — шум.»
+        </div>
+        <div style="border-left: 3px solid #7209b7; padding-left: 10px; color: #e0e0e0; font-size: 0.9em;">
+            <b>Принцип Непрерывной Рекурсии:</b> Код давно мутировал в нечто идеальное через тысячи правок. Мы не смотрим назад, мы смотрим на результат.
+        </div>
+    </div>
+</div>
+
+<!-- КАРТОЧКА 23: ГЕРОИ И БОЕВОЙ БАЛАНС -->
+<div class="log-entry major" data-tags="major logic hero combat" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-logic">HERO</span>
+            <span class="tag tag-combat">COMBAT</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2 style="color: #ffb703;">Way of the Warrior: Hero Arts & Balance</h2>
+    <p>
+        <b>Hero Mechanics:</b> Внедрены уникальные способности для мастеров оружия. <b>Лучник:</b> «Шквал стрел» (серия из 6 выстрелов через систему Energy). <b>Яри:</b> Стойка «Железная стена» с круговой атакой. <b>Катана:</b> Ульта «Counter-Step» (прыжок за спину + крит).
+        <b>Balance & Logistics:</b> Полная отмена ограничений на найм базовых юнитов (Global Roster). Исправлен стак бонусов скорости Танегасимы (переход на <code>multiplier</code>). Система <b>Home Point</b> теперь стягивает всех отступающих юнитов строго к ближайшим лагерям.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 24: СИНХРОНИЗАЦИЯ И ВИЗУАЛЬНАЯ ЧИСТОТА -->
+<div class="log-entry" data-tags="ai ui logic" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-ai">AI</span>
+            <span class="tag tag-ui">UI</span>
+            <span class="tag tag-logic">LOGIC</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>Faction Lock & Visual Hierarchy</h2>
+    <p>
+        <b>Faction Lock Protocol:</b> Внедрена аппаратная блокировка выбора клана для ИИ. Боты не начинают развитие, пока хост не определится с фракцией, что устраняет баг «фальстарта».
+        <b>Visual Polish:</b> Удалены «Ветераны Асигару» (прогресс теперь только через <b>Majesty</b>). Флаги <code>Sashimono</code> перенесены из объектов в динамические декали лидеров отрядов. 
+        <b>Wokou Fix:</b> Радиус высадки пиратов снижен до 200px, усилен алгоритм поиска пути для предотвращения застревания на островах.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 21: ВЕЛИКАЯ ЗАЧИСТКА И ЛОКАЛИЗАЦИЯ -->
+<div class="log-entry" data-tags="logic localization" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-logic">LOGIC</span>
+            <span class="tag tag-ui">LOCALIZATION</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>The Great Purge & Language Manifest</h2>
+    <p>
+        <b>The Great Purge:</b> Тотальная деструкция ванильного мусора через <code>overrideAndReplace</code>. Экспериментальные юниты, заводы и скрытые ID Люка вырезаны под корень. Shogun Warfare теперь — это на 100% автономный контент. 
+        <b>Localization:</b> Официально подтверждена полная поддержка <b>RU (DisplayText)</b> и частичная <b>EN</b>. Весь интерфейс, описания и механики переведены на русский язык для максимального погружения.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 22: ОПТИМИЗАЦИЯ И СТАБИЛЬНОСТЬ -->
+<div class="log-entry major" data-tags="major logic stability" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-logic">LOGIC</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2 style="color: #00b4d8;">Performance & Stability Boost</h2>
+    <p>
+        <b>CPU Optimization:</b> Все циклические проверки переведены на <code>every8Frames</code>, что снизило нагрузку на процессор в 8 раз. Удалено более 1200 строк избыточного кода. Логика трофеев и парирования теперь работает через прямые <code>rnd()</code>, давая +15% к скорости обработки.
+        <b>Anti-Exploit:</b> Исправлен «дюп» золотых шахт (запрет <code>reclaim</code> соседних зданий). Лимит поиска путей зафиксирован на 1000. Блокирован «Крестьянский бунт» — команда attackMove теперь доступна только боевым юнитам.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 19: СИСТЕМА ФРАКЦИЙ И КЛАНОВЫЕ АБИЛКИ -->
+<div class="log-entry major" data-tags="major logic vfx" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-logic">LOGIC</span>
+            <span class="tag tag-vfx">VFX</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2 style="color: #ff5400;">Faction Identity & Hero Arts</h2>
+    <p>
+        <b>Global Identity:</b> Полный переход на <code>globalTeamTags</code>. Теперь юниты автоматически определяют принадлежность к клану (Ода, Такеда, Отомо) без ручного прописывания тегов в каждом файле. Это «чистый» фундамент для работы фракционных бонусов.
+        <b>Otomo Blessing:</b> Лидеры клана Отомо при убийстве врага спавнят эффект «Благословения», исцеляющий их и союзников в радиусе. 
+        <b>Hero Abilities:</b> Начата разработка уникального контента для <b>Вагабонда</b> и <b>Баттосая</b>. Герои получают кастомные эффекты и способности, сравнимые с магическими техниками.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 20: ТЕХНИКА И ДОКТРИНЫ -->
+<div class="log-entry" data-tags="logic vfx combat" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-logic">LOGIC</span>
+            <span class="tag tag-vfx">VFX</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>War Machines & Combat Doctrines</h2>
+    <p>
+        <b>Da Vinci Tank:</b> Проведен рефакторинг деревянного монстра. Теперь танк не только ломает строй и игнорирует стрелы, но и постепенно исцеляет находящийся внутри экипаж. 
+        <b>Specialization & Doctrines:</b> Внедрена система из 8 доктрин (точечные бонусы к дальности и мобильности) и уникальные специализации кланов: кавалерия Такеда, огнестрел Отомо, сохэи Икко-икки и самураи Симадзу.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 17: ИИ ВЫЖИВАНИЯ (LAST STAND) -->
+<div class="log-entry major" data-tags="major ai combat" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-ai">AI</span>
+            <span class="tag tag-combat">COMBAT</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2 style="color: #ef233c;">AI Last Stand & Recovery</h2>
+    <p>
+        <b>Emergency Guard:</b> При критическом повреждении Цитадели (HP < 40%) ИИ активирует протокол <code>Last Stand</code>, разово спавня 10 защитников. 
+        <b>Post-Attack Recovery:</b> Реализована инъекция ресурсов (1500 каждого типа) при падении HP ниже 2000 для возможности камбэка. 
+        <b>Berserk-Spawn:</b> Фракционные пакеты войск (Ода, Такеда) теперь призываются автоматически при нехватке обороны в радиусе 600px.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 18: ТЕХНОЛОГИИ И ЛАЗАРЕТ -->
+<div class="log-entry" data-tags="logic ai building" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-logic">LOGIC</span>
+            <span class="tag tag-ai">AI</span>
+            <span class="tag tag-building">BUILDING</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>Tier System & Medical Logistics</h2>
+    <p>
+        <b>Tier-Lock:</b> Внедрена 3-уровневая система зданий. Самураи теперь доступны только на Lvl 2+. ИИ автоматически улучшает постройки по таймеру.
+        <b>Smart Hospital:</b> Система «Честного таймера» (Flag 30) — юниты лечатся ровно 15 секунд. Улучшен автопилот: раненые сами находят путь в лазарет и возвращаются в строй.
+        <b>Smart Shopping:</b> Юниты посещают Кузницу только при наличии врагов на карте, сопровождая покупки сочным звуком монет. 
+        <b>Global Rebalance:</b> Стартовый капитал установлен на 250/250/250. Нерф специализаций стимулирует экспансию.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 15: ЭКОНОМИЧЕСКАЯ РЕВОЛЮЦИЯ -->
+<div class="log-entry major" data-tags="major economic ai logic" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-economic">ECONOMIC</span>
+            <span class="tag tag-ai">AI</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2 style="color: #38b000;">LABOR REVOLUTION: AI Smart Economy</h2>
+    <p>
+        <b>Labor Specialization:</b> Внедрена система <code>AI_AutoJobs</code>. Строители теперь динамически оценивают казну (Рис/Золото/Дерево) и сами выбирают роль. Фактор <code>rnd</code> убирает синхронность — рабочие ведут себя как живые люди.
+        <b>Stability & Performance:</b> Фикс <code>ResourceAntiDebt</code> жестко блокирует уход в минус. Все экономические триггеры переведены на <code>every8Frames</code>, что полностью устранило микро-фризы при сотнях рабочих.
+        <b>Anti-Glitch:</b> Радиус поиска ресурсов расширен до 2500px с жесткой фильтрацией <code>gold_source</code>.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 16: СОДЕРЖАНИЕ И ПУТИ РАЗВИТИЯ -->
+<div class="log-entry" data-tags="logic economic building" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-logic">LOGIC</span>
+            <span class="tag tag-economic">ECONOMIC</span>
+            <span class="tag tag-building">BUILDING</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>Upkeep System & Forge Reformation</h2>
+    <p>
+        <b>Upkeep System:</b> Внедрено содержание войск. При дефиците ресурсов юниты получают дебафф <code>eco_starving</code> (−speed, −armour, +reload). Система защищена от отрицательных значений — списание только при наличии баланса.
+        <b>Forge Paths:</b> Реформа Кузницы. Введены три взаимоисключающих пути: <b>Воин / Мастер / Тень</b>. Логика переписана на <code>autoTrigger</code>, а ИИ теперь выбирает стратегию через <code>highPriority</code>. Технические дубликаты зданий полностью скрыты.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 14: ФЛОТ И МОРСКАЯ ТАКТИКА -->
+<div class="log-entry" data-tags="ship logic ai economic" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-ship">SHIP</span>
+            <span class="tag tag-logic">LOGIC</span>
+            <span class="tag tag-economic">ECONOMIC</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>Amphib Lock & Naval Trade 2.0</h2>
+    <p>
+        <b>Amphib Lock:</b> Революция в механике десанта. Тяжелые суда (Heavy Bune) больше не являются «сухопутными танками». Реализовано ограничение мобильности при контакте с берегом — корабль может лишь частично зайти на землю для выгрузки, после чего система принудительно откатывает его в воду.
+        <b>Smart Unload:</b> ИИ теперь проверяет <code>isOverPassableTile</code> и инициирует высадку только при наличии врагов в радиусе 50/200.
+        <b>Economy & Wokou:</b> Внедрена система «Торговля 2.0» с автоматическим выбором маршрутов. Исправлены лагеря пиратов Вокоу: верфи теперь корректно спавнят элитных корсаров с десантом.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 12: ЛОГИКА ВЫЖИВАНИЯ И НАСЛЕДИЕ -->
+<div class="log-entry major" data-tags="major logic ai legacy" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-logic">LOGIC</span>
+            <span class="tag tag-ai">AI</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2 style="color: #38b000;">Legacy Protocol & Survival Logic</h2>
+    <p>
+        <b>Legacy of Satobi46:</b> Реставрация классики — линейно-физическая траектория снарядов и адаптация системы <code>Yeeted Units</code> под новый VFX крови. *Stará škola je zpět!* (Олдскул вернулся!).
+        <b>Crew Salvation:</b> Юниты автоматически покидают технику при критическом HP (700 для ИИ / 200 для игрока). 
+        <b>Blind Retreat:</b> При HP < -250 ИИ игнорирует всё и на всех парах отступает к ближайшему <b>camp</b>.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 13: ХИРУРГИЧЕСКИЙ РЕБАЛАНС И КОД -->
+<div class="log-entry" data-tags="combat logic balance ai" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-battle">COMBAT</span>
+            <span class="tag tag-logic">LOGIC</span>
+            <span class="tag tag-ai">AI</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>Elite Balance & Code Optimization</h2>
+    <p>
+        <b>Surgical Rebalance:</b> Глубокая настройка статов для европейских пушек, Тецубо Тадакацу и Бэнкэя. Нерф Fire Cavalry: множитель 2.2x заменен на <code>armourIgnoreAmount: 10</code>. Милишники больше не атакуют воздух и воду (Melee Purge).
+        <b>Code Clean-up:</b> Переход на индексацию <code>mutator[ID]</code> для исключения конфликтов баффов. 
+        <b>Elite Focus:</b> ИИ принудительно фокусит элитные цели в радиусе 400px. Оптимизирован кайт стрелков — теперь они реагируют только на тег <code>infantry</code>.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 10: ТАКТИЧЕСКИЙ ИИ (SMART MICRO) -->
+<div class="log-entry major" data-tags="major ai logic combat" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-ai">AI</span>
+            <span class="tag tag-logic">LOGIC</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2 style="color: #7209b7;">AI TACTICAL OVERHAUL: Probabilistic Micro</h2>
+    <p>
+        <b>Smart Micro-Control:</b> ИИ обучен эксклюзивному кайту стрелками и многоуровневому фокусу целей (приоритет 70% на осадные орудия для кавалерии). Внедрен триггер «Личной гвардии» — при угрозе командиру ИИ мгновенно мобилизует элитное прикрытие.
+        <b>Probabilistic Logic:</b> Все решения (отступление, абилки, кайт) теперь завязаны на шанс (70-85%). Это убрало эффект «роботизированного роя», снизило нагрузку на CPU в 2 раза и добавило юнитам «человечности» в поведении.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 11: БОЕВАЯ МЕХАНИКА И ГАРНИЗОНЫ -->
+<div class="log-entry" data-tags="logic combat building" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-logic">LOGIC</span>
+            <span class="tag tag-combat">COMBAT</span>
+            <span class="tag tag-building">BUILDING</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>Fire Superiority & Defensive Buffs</h2>
+    <p>
+        <b>Volley Fire:</b> Стамина упразднена в пользу механики залпа. Аркебузиры выдают серию из 3-х выстрелов, уходя на 10с перезарядку. Артиллерия получила «мертвую зону» (100 range), исключающую стрельбу в упор.
+        <b>Combat Mechanics:</b> Добавлен <b>Spear Brace</b> (+30 HP/5 Armour), шанс парирования (20%) для самураев и 2.0x урон при чардже кавалерии.
+        <b>Garrison System:</b> Вместимость башен увеличена вдвое. Юниты в гарнизоне получают <code>+100 range</code> и множитель урона <code>x1.5</code> через систему <code>tower_buff_active</code>.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 8: ЛИДЕРСТВО И АУРЫ -->
+<div class="log-entry" data-tags="logic ai combat" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-logic">LOGIC</span>
+            <span class="tag tag-combat">COMBAT</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>Leader Aura System: Tactical Buffs</h2>
+    <p>
+        Реализована глубокая оптимизация <b>флаговой системы ауры (Flag 28)</b>. Теперь бонусы к характеристикам (кавалерия/стрелки/пехота) активируются мгновенно при входе в радиус командира и так же быстро откатываются при его гибели или удалении. Система перенастроена на работу с минимальным потреблением ресурсов CPU при сохранении высокой точности детекции союзников.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 9: АРМЕЙСКАЯ ИЕРАРХИЯ (REVOLUTION) -->
+<div class="log-entry major" data-tags="major ai logic" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-ai">AI</span>
+            <span class="tag tag-logic">LOGIC</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2 style="color: #ef233c;">ARMY LOGIC 3.0: Hierarchy & Psychology</h2>
+    <p>
+        <b>Chain of Command:</b> Тотальный снос старой системы следования. Юниты теперь образуют единый организм: копируют приказы лидера (атака цели, удержание позиции) и автоматически примыкают к строю (<code>JoinTheArmy</code>). 
+        <b>Psychology:</b> Внедрена система паники — при критических потерях лидер активирует статус <code>ai_panicked</code>, организуя тактическое отступление. 
+        <b>Optimization:</b> Логика переведена на дискретные кастомные таймеры (3-10с), что гарантирует стабильный FPS даже в масштабных сражениях.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 6: АТМОСФЕРА И НЕБО -->
+<div class="log-entry major" data-tags="major vfx sfx atmosphere" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-vfx">VFX</span>
+            <span class="tag tag-sfx">SFX</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2 style="color: #9d4edd;">MNDR Soundscape & Sky Revolution</h2>
+    <p>
+        <b>Atmosphere:</b> Интегрирована гибридная система облаков и цикл «День/Ночь» (на базе Steamlands/Upgrade Experimentals). Полная замена саундтрека на Shogun II OST. 
+        <b>Ballistics & Smoke:</b> Тотальный рефакторинг порохового дыма — вместо «кругов» теперь реалистичная завеса. Старые «праздничные» искры вырезаны под корень. Спрайт пули <code>matchlock</code> заменен на реалистичную модель вместо куба. 
+        <b>Feedback:</b> Добавлены затяжные столбы дыма <code>postExplosionSmoke</code> и частицы грунта при взрывах. Боевой текст (БУУМ!) зафиксирован по оси Z.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 7: ГРАФИКА И ЖИВОЙ МИР -->
+<div class="log-entry" data-tags="vfx logic ai" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-vfx">VFX</span>
+            <span class="tag tag-logic">LOGIC</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>Living World & Technical Shadows</h2>
+    <p>
+        <b>Shadow System:</b> Полный переход на динамические декали для зданий и юнитов (<code>image_shadow: NONE</code>). Реализованы мягкие градиентные тени для осадной техники и гигантов. 
+        <b>Unit Behavior:</b> Внедрена система <code>idleSweep</code> (микро-повороты в строю) и пыль при марше. При истощении (Stamina < 20%) над юнитом появляется пар. 
+        <b>Logic & Gore:</b> При потере всех лагерей юниты гибнут через 5с, выпуская иконку души (Yeeted). Добавлено динамическое кровотечение (капли на ландшафте) и искры при работе шахтеров.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 4: ОКРУЖЕНИЕ И ПРИРОДА -->
+<div class="log-entry major" data-tags="major vfx logic ai" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-vfx">VFX</span>
+            <span class="tag tag-logic">LOGIC</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2 style="color: #ffb703;">SEASON REVOLUTION: Autonomous Nature & Waves</h2>
+    <p>
+        <b>Cyclic Seasons:</b> Полный отказ от глобальных триггеров. Каждое дерево — автономный объект с формулой <code>(self.customTimer % 300) > (self.id % 120)</code>, что создает эффект плавного «перетекания» сезонов без лагов. Рефакторинг сакуры (radius:17) убрал наслоение текстур. 
+        <b>Hydrodynamics:</b> Глубокий рефакторинг Gear Protocol II. Волны теперь динамически скейлятся от <code>self.speed</code> и <code>radius</code> судна, плавно затухают по альфе и блокируются на суше через <code>isOverLiquid</code>.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 5: ВИЗУАЛ И ФИДБЕК -->
+<div class="log-entry" data-tags="vfx sfx ui combat" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-vfx">VFX</span>
+            <span class="tag tag-sfx">SFX</span>
+            <span class="tag tag-combat">COMBAT</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>Battle Aesthetics & Tactical Feedback</h2>
+    <p>
+        <b>Combat Immersion:</b> Внедрена пороховая эстетика (отдача <code>recoilOffset: -3</code>) и усиленные сплэши крови при попадании аркебуз. Юниты получили дифференцированную озвучку <code>move/attack</code> в зависимости от типа войск. 
+        <b>Visual Polish:</b> Добавлены Triangle Markers (teamColors) с авто-скейлом, nano-build лучи для строек и уникальный плащ для <b>Tokitaka</b>. Интегрирован Battle Timer в панель ресурсов и плавное движение (Smooth Motion) для устранения дерганья анимаций.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 2: UI, ИМЕНА И ЗДОРОВЬЕ -->
+<div class="log-entry" data-tags="ui logic" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-ui">UI</span>
+            <span class="tag tag-logic">LOGIC</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2>Personal Identity & Dynamic Health</h2>
+    <p>
+        Внедрена система <b>Personal Identity</b>: генерация имен и званий (900+ комбинаций) через хак с <code>description</code>, что позволило разделить ФИО и ранг без потери компактности. 
+        Параллельно интегрированы <b>Classic Health Bars</b> — динамические декали HP теперь проявляются только у раненых бойцов, полностью очищая экран от визуального мусора в мирное время.
+    </p>
+</div>
+
+<!-- КАРТОЧКА 3: ЗВУК, ИИ И ГЛОБАЛЬНЫЙ РЕФАКТОРИНГ -->
+<div class="log-entry major" data-tags="major logic vfx ai sfx" data-date="10.05.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-vfx">VFX</span>
+            <span class="tag tag-sfx">SFX</span>
+            <span class="tag tag-ai">AI</span>
+        </div>
+        <div class="entry-date">10.05.2026</div>
+    </div>
+    <h2 style="color: #00f5d4;">INDUSTRY FIRST: Acoustic Leap & Cognitive AI</h2>
+    <p>
+        <b>Acoustic Immersion:</b> Реализован обход лимитов движка через векторную инъекцию <code>movementEffect</code> — теперь юниты имеют 8 вариативных звуков шагов с умной фильтрацией <code>isSelected()</code>. 
+        <b>Cognitive AI:</b> Логика переписана на закупку по коэффициенту 1.2 с учетом разведки. Удалено 40% избыточного кода в <code>[action]</code>. 
+        Проведена тотальная санация: от юстировки физики до фикса конфликтов в финальных козырях (Огненные стрелы, Танк Да Винчи).
+    </p>
+</div>
+
+<div class="content">
+    <div class="log-entry major" data-tags="major logic economic building" data-date="14.04.2026">
+        <div class="log-header">
+            <div>
+                <span class="tag tag-major">MAJOR</span>
+                <span class="tag tag-logic">LOGIC</span>
+                <span class="tag tag-economic">ECONOMIC</span>
+                <span class="tag tag-building">BUILDING</span>
+            </div>
+            <div class="entry-date">10.05.2026</div>
+        </div>
+        <h2 style="color: #ffd700;">GREAT STANDARDIZATION: Forge Overhaul</h2>
+        <p>
+            Проведена полная деконструкция архитектуры Кузницы. Упразднены архаичные баффы и иероглифическая индикация, создававшая визуальный шум. 
+            Внедрена стандартизированная трехуровневая система прогрессии <b>[I] [II] [III]</b> с фиксированным экономическим балансом LVL 1-3. 
+            Реализован <b>Universal FSM</b> (Finite State Machine) для веток «Путь Меча» и «Путь Стрелка», что полностью исключает конфликты логических состояний при переключении тех-процессов. 
+            Скорректированы веса приоритетов AI: теперь бот выстраивает стратегию развития, опираясь на актуальную технологическую ветку, а не на случайную выборку.
+        </p>
+    </div>
+</div>
+
+
+<script> 
+let searchTimer;
+
+function applyTagColors() {
+    document.querySelectorAll('.tag').forEach(tag => {
+        const type = tag.innerText.toLowerCase().trim();
+        tag.classList.add('tag-' + type);
+    });
+}
+window.addEventListener('DOMContentLoaded', applyTagColors);
+
+const toggleInfo = document.getElementById('toggleInfo');
+const infoContent = document.getElementById('infoContent');
+const clearBtn = document.getElementById('clearSearch');
+const searchCount = document.getElementById('searchCount');
+const searchInput = document.getElementById('smartSearch');
+const navItems = document.querySelectorAll('.nav-item');
+const guideBtn = document.getElementById('guideBtn');
+const guideMenu = document.getElementById('guideMenu');
+
+toggleInfo.onclick = () => {
+    infoContent.classList.toggle('active');
+    const isOpen = infoContent.classList.contains('active');
+    toggleInfo.innerText = isOpen ? 'Закрыть статистику' : 'Открыть статистику';
+    guideMenu.style.top = isOpen ? '295px' : '115px';
+};
+
+clearBtn.onclick = () => {
+    searchInput.value = '';
+    updateDisplay();
+    searchInput.focus();
+};
+
+guideBtn.onclick = (e) => {
+    e.stopPropagation();
+    guideMenu.classList.toggle('hidden');
+};
+
+document.onclick = () => guideMenu.classList.add('hidden');
+guideMenu.onclick = (e) => e.stopPropagation();
+
+function typeWrite(element, text, callback) {
+    if (element.typingTimer) clearTimeout(element.typingTimer);
+    element.innerHTML = ''; 
+    element.classList.add('typing');
+    let i = 0;
+    function type() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            element.typingTimer = setTimeout(type, 10); 
+        } else {
+            element.classList.remove('typing');
+            if (callback) callback();
+        }
+    }
+    type();
+}
+
+function updateDisplay() {
+    const cards = document.querySelectorAll('.log-entry');
+    const query = searchInput.value.toLowerCase().trim();
+    const activeItem = document.querySelector('.nav-item.active');
+    const activeFilter = activeItem ? activeItem.getAttribute('data-filter').toLowerCase() : 'all';
+    let visibleCount = 0;
+    
+    clearBtn.style.display = query.length > 0 ? 'block' : 'none';
+    
+    cards.forEach(card => {
+        const isManifest = card.classList.contains('hidden-manifest');
+        const titleEl = card.querySelector('h2');
+        const descEl = card.querySelector('p') || card.querySelector('div');
+        
+        if (!card.dataset.fullTitle) card.dataset.fullTitle = titleEl.innerText;
+        if (!card.dataset.fullDesc) card.dataset.fullDesc = descEl.innerText;
+        
+        const tagsText = card.getAttribute('data-tags').toLowerCase();
+        const dateText = card.getAttribute('data-date') ? card.getAttribute('data-date').toLowerCase() : '';
+        const manifestFound = isManifest && (query === "манифест" || query === "manifest" || query === "mndr");
+        
+        const matchesSearch = card.dataset.fullTitle.toLowerCase().includes(query) || 
+                             card.dataset.fullDesc.toLowerCase().includes(query) || 
+                             tagsText.includes(query) ||
+                             dateText.includes(query);
+                             
+        const matchesFilter = activeFilter === 'all' || tagsText.includes(activeFilter);
+        const stateKey = query + activeFilter;
+
+        if (manifestFound || (!isManifest && matchesSearch && matchesFilter)) {            
+            visibleCount++; 
+            if (card.classList.contains('hidden') || card.dataset.lastState !== stateKey) {
+                card.classList.remove('hidden');
+                card.style.display = 'block';
+                card.dataset.lastState = stateKey;
+
+                let tText = card.dataset.fullTitle;
+                let dText = card.dataset.fullDesc;
+
+                if (query !== "" && !isManifest) {
+                    const regex = new RegExp(`(${query})`, 'gi');
+                    tText = tText.replace(regex, '<span class="search-highlight">$1</span>');
+                    dText = dText.replace(regex, '<span class="search-highlight">$1</span>');
+                }
+
+                typeWrite(titleEl, tText, () => typeWrite(descEl, dText));
+            }
+        } else {
+            card.classList.add('hidden');
+            card.style.display = 'none';
+            card.dataset.lastState = '';
+        }
+    });
+    searchCount.innerText = query.length > 0 ? 'Найдено: ' + visibleCount : '';
+}
+
+searchInput.oninput = () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(updateDisplay, 300);
+};
+
+navItems.forEach(item => {
+    item.onclick = () => {
+        navItems.forEach(btn => btn.classList.remove('active'));
+        item.classList.add('active');
+        const filter = item.getAttribute('data-filter');        
+        searchInput.value = (filter === 'all') ? '' : filter;        
+        guideMenu.classList.add('hidden');
+        updateDisplay();
+    };
+});
+
+window.onload = () => {
+    guideMenu.style.top = '115px';
+    applyTagColors();
+    updateDisplay();
+};
+</script>
+
+</body>
+</html>
