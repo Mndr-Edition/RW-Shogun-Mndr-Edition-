@@ -377,21 +377,48 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     padding: 0 2px;
     border-radius: 2px;
 }
+    .download-btn {
+    display: block;
+    text-align: center;
+    background: #2ecc71; /* Зеленый цвет на запуск */
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 15px;
+    transition: background 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2);
+}
+
+.download-btn:hover {
+    background: #27ae60;
+}
+
+.download-btn:active {
+    transform: scale(0.98);
+}
+
+
+    
 </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <div class="mod-info" style="padding: 15px;">
-        <div id="infoContent" class="mod-info-content">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">               
-                <div>
-                    <b style="margin: 0; font-size: 18px; letter-spacing: -0.5px;">RW: SHOGUN</b>
-                    
-                    <span style="opacity: 0.5; font-size: 10px; display: block; margin-top: -2px;">MNDR Edition © 2026</span>
-                </div>
-                <div class="version-badge" style="margin: 0; font-size: 10px;">v5.0</div>
-            </div>
+    <div class="mod-info">
+        <b>SHOGUN: MNDR EDITION</b>
+        Global overhaul mod for Rusted Warfare set in Sengoku Jidai.
+    </div>
+
+    <a href="https://github.com/Mndr-Edition/RW-Shogun-Mndr-Edition-/releases/download/v5.0/SWII-11-05-2026.rwmod" class="download-btn" download>
+        Скачать мод (.rwmod, 69 МБ)
+    </a>
+
+    <div class="mod-info-content">
+        </div>
+</div>
 
             <div style="display: flex; gap: 5px; margin-bottom: 12px; margin-top: 8px;">
                 <span style="color: #fab1a0; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(250, 177, 160, 0.3); padding: 1px 5px; border-radius: 3px; font-weight: 800;">Global Overhaul</span>
