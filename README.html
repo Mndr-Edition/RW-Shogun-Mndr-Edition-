@@ -304,17 +304,28 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
 
 @media (max-width: 768px) {
     body { 
-        flex-direction: column-reverse; /* Меняет порядок: сначала контент, потом сайдбар */
+        flex-direction: column; 
         height: auto; 
-        overflow: visible;
+        overflow-x: hidden; /* Фикс скролла влево-вправо */
     }
     .sidebar { 
         width: 100%; 
+        box-sizing: border-box;
         height: auto; 
-        position: static; /* Кнопки больше не липнут к экрану */
+        position: static; 
         border-right: none;
     }
+    .download-container {
+        display: flex; 
+        gap: 10px;
     }
+    .download-btn {
+        flex: 1;
+        margin-bottom: 0; 
+    }
+}
+
+
 
 .tag-ai { background: #f1c40f !important; color: #000 !important; }
 .tag-sfx { background: #e67e22 !important; color: #fff !important; }
@@ -421,38 +432,7 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     <div class="download-container">
         <a href="https://github.com/Mndr-Edition/RW-Shogun-Mndr-Edition-/releases/download/v5.0/SWII-11-05-2026.rwmod" class="download-btn github" download>GitHub (.rwmod)</a>
         <a href="https://www.moddb.com/mods/shogun-warfare-mndr-edition" target="_blank" class="download-btn moddb">ModDB Site</a>
-    </div>
-
-            
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);">                                   
-                <div>
-             <div style="grid-column: span 2; margin-bottom: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);">
-    <span style="font-size: 10px; opacity: 0.7; display: block; margin-bottom: 5px;">ПРЯМАЯ ССЫЛКА НА МОД:</span>
-    <a href="https://www.moddb.com/mods/shogun-warfare-mndr-edition" target="_blank" style="color: #3498db; text-decoration: none; font-size: 11px; word-break: break-all; transition: 0.2s; border-bottom: 1px dashed rgba(52, 152, 219, 0.4);">
-        https://www.moddb.com/mods/shogun-warfare-mndr-edition
-    </a>
-</div>                
-                </div>
-            </div>        
-
-            <div style="margin-bottom: 15px;">
-                <div style="display: flex; justify-content: space-between; font-size: 9px; margin-bottom: 4px; font-weight: 700; opacity: 0.8;">
-                    <span>SYSTEM OVERHAUL</span>
-                    <span>100%</span>
-                </div>
-                <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px;">
-                    <div style="width: 100%; height: 100%; background: #fab1a0; box-shadow: 0 0 10px rgba(250, 177, 160, 0.3); border-radius: 10px;"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="guideBtn" style="display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--blue); color: white; padding: 8px; border-radius: 6px; font-size: 11px; font-weight: 700; transition: 0.2s; box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);">
-            <span>Открыть навигатор разделов</span>
-        </div>
-
-        <div id="toggleInfo" class="toggle-arrow">Открыть статистику</div>
-    </div>
+    </div>    
 
     <div class="search-box">
         <input type="text" id="smartSearch" placeholder="Поиск (VFX, AI, Код, Манифест)..." style="padding-right: 110px;">
@@ -461,20 +441,8 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
             <button id="clearSearch" style="background: none; border: none; color: #555; cursor: pointer; font-size: 20px; display: none; outline: none; pointer-events: auto; padding: 0;">×</button>
         </div>
     </div>
-    
-   <div id="guideMenu" class="hidden" style="position: absolute; top: 115px; left: 20px; width: 260px; z-index: 1000;">
-    <div class="guide-header">Навигатор по Shogun</div>
-    <div class="nav-menu">
-        <div class="nav-item active" data-filter="all">📂 Все правки</div>
-        <div class="nav-item" data-filter="major">🔥 Главное (Major)</div>
-        <div class="nav-item" data-filter="ai">🧠 Логика ИИ</div>
-        <div class="nav-item" data-filter="vfx">✨ Визуал / VFX</div>
-        <div class="nav-item" data-filter="hero">🏯 Герои</div>
-        <div class="nav-item" data-filter="economic">💰 Экономика</div>
-        <div class="nav-item" data-filter="ship">⚓ Флот</div>
-        <div class="nav-item" data-filter="logic">⚙️ Системный код</div>
-    </div>
 </div>
+
 
 <!-- КАРТОЧКА: МАНИФЕСТ РАЗРАБОТЧИКА (HIDDEN BY DEFAULT) -->
 <div class="log-entry hidden-manifest" data-tags="manifest secret secret-tag" data-date="10.05.2026" style="display: none; border-left: 4px solid #7209b7; background: #140a1d;">
@@ -931,35 +899,17 @@ function applyTagColors() {
 }
 window.addEventListener('DOMContentLoaded', applyTagColors);
 
-const toggleInfo = document.getElementById('toggleInfo');
-const infoContent = document.getElementById('infoContent');
 const clearBtn = document.getElementById('clearSearch');
 const searchCount = document.getElementById('searchCount');
 const searchInput = document.getElementById('smartSearch');
-const navItems = document.querySelectorAll('.nav-item');
-const guideBtn = document.getElementById('guideBtn');
-const guideMenu = document.getElementById('guideMenu');
 
-toggleInfo.onclick = () => {
-    infoContent.classList.toggle('active');
-    const isOpen = infoContent.classList.contains('active');
-    toggleInfo.innerText = isOpen ? 'Закрыть статистику' : 'Открыть статистику';
-    guideMenu.style.top = isOpen ? '295px' : '115px';
-};
-
-clearBtn.onclick = () => {
-    searchInput.value = '';
-    updateDisplay();
-    searchInput.focus();
-};
-
-guideBtn.onclick = (e) => {
-    e.stopPropagation();
-    guideMenu.classList.toggle('hidden');
-};
-
-document.onclick = () => guideMenu.classList.add('hidden');
-guideMenu.onclick = (e) => e.stopPropagation();
+if (clearBtn && searchInput) {
+    clearBtn.onclick = () => {
+        searchInput.value = '';
+        updateDisplay();
+        searchInput.focus();
+    };
+}
 
 function typeWrite(element, text, callback) {
     if (element.typingTimer) clearTimeout(element.typingTimer);
@@ -982,21 +932,21 @@ function typeWrite(element, text, callback) {
 function updateDisplay() {
     const cards = document.querySelectorAll('.log-entry');
     const query = searchInput.value.toLowerCase().trim();
-    const activeItem = document.querySelector('.nav-item.active');
-    const activeFilter = activeItem ? activeItem.getAttribute('data-filter').toLowerCase() : 'all';
     let visibleCount = 0;
     
-    clearBtn.style.display = query.length > 0 ? 'block' : 'none';
+    if (clearBtn) clearBtn.style.display = query.length > 0 ? 'block' : 'none';
     
     cards.forEach(card => {
         const isManifest = card.classList.contains('hidden-manifest');
         const titleEl = card.querySelector('h2');
         const descEl = card.querySelector('p') || card.querySelector('div');
         
-        if (!card.dataset.fullTitle) card.dataset.fullTitle = titleEl.innerText;
-        if (!card.dataset.fullDesc) card.dataset.fullDesc = descEl.innerText;
+        if (!titleEl) return;
         
-        const tagsText = card.getAttribute('data-tags').toLowerCase();
+        if (!card.dataset.fullTitle) card.dataset.fullTitle = titleEl.innerText;
+        if (!card.dataset.fullDesc) card.dataset.fullDesc = descEl ? descEl.innerText : '';
+        
+        const tagsText = card.getAttribute('data-tags') ? card.getAttribute('data-tags').toLowerCase() : '';
         const dateText = card.getAttribute('data-date') ? card.getAttribute('data-date').toLowerCase() : '';
         const manifestFound = isManifest && (query === "манифест" || query === "manifest" || query === "mndr");
         
@@ -1004,16 +954,13 @@ function updateDisplay() {
                              card.dataset.fullDesc.toLowerCase().includes(query) || 
                              tagsText.includes(query) ||
                              dateText.includes(query);
-                             
-        const matchesFilter = activeFilter === 'all' || tagsText.includes(activeFilter);
-        const stateKey = query + activeFilter;
 
-        if (manifestFound || (!isManifest && matchesSearch && matchesFilter)) {            
+        if (manifestFound || (!isManifest && matchesSearch)) {            
             visibleCount++; 
-            if (card.classList.contains('hidden') || card.dataset.lastState !== stateKey) {
+            if (card.style.display !== 'block' || card.dataset.lastState !== query) {
                 card.classList.remove('hidden');
                 card.style.display = 'block';
-                card.dataset.lastState = stateKey;
+                card.dataset.lastState = query;
 
                 let tText = card.dataset.fullTitle;
                 let dText = card.dataset.fullDesc;
@@ -1024,39 +971,41 @@ function updateDisplay() {
                     dText = dText.replace(regex, '<span class="search-highlight">$1</span>');
                 }
 
-                typeWrite(titleEl, tText, () => typeWrite(descEl, dText));
+                if (query.length > 0) {
+                    if (titleEl.typingTimer) clearTimeout(titleEl.typingTimer);
+                    if (descEl && descEl.typingTimer) clearTimeout(descEl.typingTimer);
+                    titleEl.innerHTML = tText;
+                    if (descEl) descEl.innerHTML = dText;
+                } else {
+                    typeWrite(titleEl, tText, () => {
+                        if (descEl) typeWrite(descEl, dText);
+                    });
+                }
             }
         } else {
-            card.classList.add('hidden');
             card.style.display = 'none';
+            card.classList.add('hidden');
             card.dataset.lastState = '';
+            if (titleEl.typingTimer) clearTimeout(titleEl.typingTimer);
+            if (descEl && descEl.typingTimer) clearTimeout(descEl.typingTimer);
         }
     });
-    searchCount.innerText = query.length > 0 ? 'Найдено: ' + visibleCount : '';
+    if (searchCount) searchCount.innerText = query.length > 0 ? 'Найдено: ' + visibleCount : '';
 }
 
-searchInput.oninput = () => {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(updateDisplay, 300);
-};
-
-navItems.forEach(item => {
-    item.onclick = () => {
-        navItems.forEach(btn => btn.classList.remove('active'));
-        item.classList.add('active');
-        const filter = item.getAttribute('data-filter');        
-        searchInput.value = (filter === 'all') ? '' : filter;        
-        guideMenu.classList.add('hidden');
-        updateDisplay();
+if (searchInput) {
+    searchInput.oninput = () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(updateDisplay, 150);
     };
-});
+}
 
 window.onload = () => {
-    guideMenu.style.top = '115px';
     applyTagColors();
     updateDisplay();
 };
 </script>
+
 
 </body>
 </html>
