@@ -303,12 +303,18 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
 }
 
 @media (max-width: 768px) {
-    body { flex-direction: column; overflow: visible; }
-    .sidebar { width: 100%; height: auto; box-sizing: border-box; position: sticky; top: 0; z-index: 100; }
-    .content { padding: 15px; overflow: visible; }
-    .nav-menu { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 5px; }
-    .nav-item { white-space: nowrap; margin: 0; }
-}
+    body { 
+        flex-direction: column-reverse; /* Меняет порядок: сначала контент, потом сайдбар */
+        height: auto; 
+        overflow: visible;
+    }
+    .sidebar { 
+        width: 100%; 
+        height: auto; 
+        position: static; /* Кнопки больше не липнут к экрану */
+        border-right: none;
+    }
+    }
 
 .tag-ai { background: #f1c40f !important; color: #000 !important; }
 .tag-sfx { background: #e67e22 !important; color: #fff !important; }
@@ -412,18 +418,12 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
         Global overhaul mod for Rusted Warfare set in Sengoku Jidai.
     </div>
 
-    <a href="https://github.com/Mndr-Edition/RW-Shogun-Mndr-Edition-/releases/download/v5.0/SWII-11-05-2026.rwmod" class="download-btn" download>
-        Скачать мод (.rwmod, 72 МБ)
-    </a>
+    <div class="download-container">
+        <a href="https://github.com/Mndr-Edition/RW-Shogun-Mndr-Edition-/releases/download/v5.0/SWII-11-05-2026.rwmod" class="download-btn github" download>GitHub (.rwmod)</a>
+        <a href="https://www.moddb.com/mods/shogun-warfare-mndr-edition" target="_blank" class="download-btn moddb">ModDB Site</a>
+    </div>
 
-    <div class="mod-info-content">
-        </div>
-</div>
-
-            <div style="display: flex; gap: 5px; margin-bottom: 12px; margin-top: 8px;">
-                <span style="color: #fab1a0; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(250, 177, 160, 0.3); padding: 1px 5px; border-radius: 3px; font-weight: 800;">Global Overhaul</span>
-                <span style="color: #3498db; font-size: 8px; text-transform: uppercase; border: 1px solid rgba(52, 152, 219, 0.3); padding: 1px 5px; border-radius: 3px; font-weight: 800;">Refactoring</span>
-            </div>
+            
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);">                                   
                 <div>
