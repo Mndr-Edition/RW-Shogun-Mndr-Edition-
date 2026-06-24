@@ -196,6 +196,10 @@ body {
     margin-left: 2px;
     color: var(--blue);
 }
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+} 
 
 @keyframes blink {
     0%, 100% { opacity: 1; }
@@ -1076,7 +1080,3 @@ window.onload = () => {
 
     
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-} 
