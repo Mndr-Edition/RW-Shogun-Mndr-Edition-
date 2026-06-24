@@ -44,6 +44,12 @@ body {
     line-height: 1.4;
 }
 
+.tag-stealth { background: #34495e !important; color: #fff !important; box-shadow: 0 0 8px rgba(52, 73, 94, 0.5); }
+.tag-unit { background: #16a085 !important; color: #fff !important; }
+.tag-map { background: #27ae60 !important; color: #fff !important; }
+.tag-balance { background: #d35400 !important; color: #fff !important; }
+
+  
 .mod-info b { color: #fab1a0; display: block; font-size: 16px; margin-bottom: 5px; }
 
 .mod-info-content {
@@ -142,14 +148,6 @@ body {
 
 .nav-item:hover { background: rgba(0,0,0,0.03); }
 
-.content {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
 
 .log-entry {
     width: 100%;
@@ -179,9 +177,17 @@ body {
 .log-entry:hover {
     z-index: 10;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-    border-color: var(--blue);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0);
     border-bottom: 1px solid var(--blue);
+}
+
+.log-entry.fade-in{
+    opacity:0;
+  transition: opacity 0.6s ease-in-out;
+  }
+
+.log-entry.fade-in.visible{
+  opacity:1;
 }
 
 .typing::after {
@@ -195,12 +201,6 @@ body {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
 }
-
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 .tag {
     font-size: 10px;
     font-weight: 900;
@@ -407,9 +407,8 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     margin-bottom: 15px;
     transition: background 0.2s ease, transform 0.1s ease;
     box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2);
-}
-
-.download-btn:hover {
+    }
+    .download-btn:hover {
     background: #27ae60;
 }
 
@@ -426,7 +425,7 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
 <div class="sidebar">
     <div class="mod-info">
         <b>SHOGUN: MNDR EDITION</b>
-        Global overhaul mod for Rusted Warfare set in Sengoku Jidai.
+       Total conversion Remaster mod for Rusted Warfare set in Sengoku Jidai.
     </div>
 
     <div class="download-container">
@@ -443,8 +442,6 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </div>
 </div>
 
-
-<!-- КАРТОЧКА: МАНИФЕСТ РАЗРАБОТЧИКА (HIDDEN BY DEFAULT) -->
 <div class="log-entry hidden-manifest" data-tags="manifest secret secret-tag" data-date="10.05.2026" style="display: none; border-left: 4px solid #7209b7; background: #140a1d;">
     <div class="log-header">
         <div>
@@ -467,7 +464,63 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </div>
 </div>
 
-<!-- КАРТОЧКА 23: ГЕРОИ И БОЕВОЙ БАЛАНС -->
+<div class="log-entry major" data-tags="major logic ai balance ui map sfx" data-date="24.06.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-logic">CODE</span>
+            <span class="tag tag-balance">BALANCE</span>
+            <span class="tag tag-ai">AI</span>
+        </div>
+        <div class="entry-date">24.06.2026</div>
+    </div>
+    <h2 style="color: #00f5d4;">VERSION 6.3.0: Territory War & UI Cleanout</h2>
+    <p>
+        <b>Territory Overhaul:</b> Тотальный отказ от механики реклейма, риса и дерева. Игра переведена на чистую борьбу за золото и удержание ключевых территорий. Бои стали глубже, а средний тайминг сражений увеличился на 5–7 секунд.
+        <b>Clan Tech Tree:</b> В Цитадели реализована система уникальных клановых апгрейдов, открывающих доступ к элитным войскам. Приоритеты и логика лидерства ИИ полностью переписаны под новые условия.
+        <b>UI & HUD Purge:</b> Полная замена фона главного меню через глубокий разбор ID движка. Удалены все стандартные статус-бары для максимальной разгрузки экрана. Добавлен счетчик полученного урона и синхронизированный кастомный таймер матча.
+        <b>Visuals & Sound:</b> Возвращен классический атмосферный саундтрек. Добавлены тени фракций, сделан респрайт иконки лучника Сохея и снаряда пушки Т2. Оптимизированы 2 новые кастомные карты.
+    </p>
+</div>
+
+<div class="log-entry major" data-tags="major logic unit combat map vfx" data-date="18.06.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-unit">UNITS</span>
+            <span class="tag tag-vfx">EFFECTS</span>
+            <span class="tag tag-map">MAPS</span>
+        </div>
+        <div class="entry-date">18.06.2026</div>
+    </div>
+    <h2 style="color: #ffd700;">VERSION 6.2.0: Faction Camps & Barrel Heat</h2>
+    <p>
+        <b>Faction Camp System:</b> Уникальные войска теперь жестко привязаны к Фракционному Кемпу. Разблокировка происходит через разовую покупку, скрывая лишний экшен и разгружая интерфейс. Удалены лимиты в казармах — найм теперь полностью свободный.
+        <b>New Contenders:</b> Добавлены <b>Асигару с нагаэ-яри</b> (клан Ода) с экстремальной дальностью атаки для удержания строя, и <b>Сохей с Юми</b> — новый мощный юнит-снайпер.
+        <b>Artillery Polish:</b> Более 6 часов работы над эффектами пушек. Реализована система динамического накаления дула после выстрела и огненный трейл для снаряда Т2. Т1 наносит 2.0 урона по зданиям / 1.6 по пехоте (Т2 дает +0.2 к обоим мутаторам).
+        <b>Melee Fluidity:</b> Для пехоты с катанами и пикинеров отключен обязательный поворот корпуса (<code>isFixedFiring: false</code>). Микро-тупняки в замесах исчезли, бойцы атакуют мгновенно во все стороны. Нагината и кавалерия сохранили тяжелое поведение. Добавлены карты 1х1 и 2х2.
+    </p>
+</div>
+
+<div class="log-entry major" data-tags="major stealth unit map logic" data-date="12.06.2026">
+    <div class="log-header">
+        <div>
+            <span class="tag tag-major">MAJOR</span>
+            <span class="tag tag-stealth">STEALTH</span>
+            <span class="tag tag-unit">UNITS</span>
+        </div>
+        <div class="entry-date">12.06.2026</div>
+    </div>
+    <h2 style="color: #ff5400;">VERSION 6.0: Total Conversion & Shroud Masters</h2>
+    <p>
+        <b>Stealth Engine Hack:</b> Впервые в Rusted Warfare реализована полноценная механика скрытности. <b>Ниндзя Кишо</b> и <b>Тени Ханзо</b> абсолютно невидимы для врага, пока к ним не приблизятся вплотную. Туман войны теперь имеет решающее значение.
+        <b>Kukidzai (Glass Cannon):</b> Первый полностью уникальный юнит мода. Прото-ниндзя в плаще и с чубом. Легкая штурмовая пехота ближнего боя, наносящая огромный урон по живой силе и героям, но требующая жесткого микроконтроля из-за слабой брони.
+        <b>Infrastructure & Maps:</b> Добавлены новые территории (первая официальная карта 1х1 под баланс мода). Код очищен от старых комментариев, переработана структура папок для облегчения парсера движка, оптимизирован юнит-удалятор.
+    </p>
+</div>
+
+
+  
 <div class="log-entry major" data-tags="major logic hero combat" data-date="10.05.2026">
     <div class="log-header">
         <div>
@@ -479,12 +532,11 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </div>
     <h2 style="color: #ffb703;">Way of the Warrior: Hero Arts & Balance</h2>
     <p>
-        <b>Hero Mechanics:</b> Внедрены уникальные способности для мастеров оружия. <b>Лучник:</b> «Шквал стрел» (серия из 6 выстрелов через систему Energy). <b>Яри:</b> Стойка «Железная стена» с круговой атакой. <b>Катана:</b> Ульта «Counter-Step» (прыжок за спину + крит).
-        <b>Balance & Logistics:</b> Полная отмена ограничений на найм базовых юнитов (Global Roster). Исправлен стак бонусов скорости Танегасимы (переход на <code>multiplier</code>). Система <b>Home Point</b> теперь стягивает всех отступающих юнитов строго к ближайшим лагерям.
-    </p>
+    <b>Hero Mechanics:</b> Внедрены уникальные способности для мастеров оружия. <b>Лучник:</b> «Шквал стрел» (серия из 6 выстрелов через систему Energy). <b>Яри:</b> Стойка «Железная стена» с круговой атакой. <b>Катана:</b> Ульта «Counter-Step» (прыжок за спину + крит).
+    <b>Tactical Progression:</b> Система <b>Home Point</b> стягивает всех отступающих юнитов строго к ближайшим лагерям. Юниты фракций теперь требуют открытия технологий в Цитадели.
+</p>
 </div>
 
-<!-- КАРТОЧКА 24: СИНХРОНИЗАЦИЯ И ВИЗУАЛЬНАЯ ЧИСТОТА -->
 <div class="log-entry" data-tags="ai ui logic" data-date="10.05.2026">
     <div class="log-header">
         <div>
@@ -496,13 +548,13 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </div>
     <h2>Faction Lock & Visual Hierarchy</h2>
     <p>
-        <b>Faction Lock Protocol:</b> Внедрена аппаратная блокировка выбора клана для ИИ. Боты не начинают развитие, пока хост не определится с фракцией, что устраняет баг «фальстарта».
-        <b>Visual Polish:</b> Удалены «Ветераны Асигару» (прогресс теперь только через <b>Majesty</b>). Флаги <code>Sashimono</code> перенесены из объектов в динамические декали лидеров отрядов. 
-        <b>Wokou Fix:</b> Радиус высадки пиратов снижен до 200px, усилен алгоритм поиска пути для предотвращения застревания на островах.
-    </p>
+    <b>Faction Lock Protocol:</b> Внедрена аппаратная блокировка выбора клана для ИИ. Боты не начинают развитие, пока хост не определится с фракцией, что устраняет баг «фальстарта».
+    <b>Visual Polish:</b> Флаги <code>Sashimono</code> перенесены из объектов в динамические декали лидеров отрядов. 
+    <b>Wokou Fix:</b> Радиус высадки пиратов снижен до 200px, усилен алгоритм поиска пути для предотвращения застревания на островах.
+</p>
 </div>
 
-<!-- КАРТОЧКА 21: ВЕЛИКАЯ ЗАЧИСТКА И ЛОКАЛИЗАЦИЯ -->
+  
 <div class="log-entry" data-tags="logic localization" data-date="10.05.2026">
     <div class="log-header">
         <div>
@@ -518,7 +570,6 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </p>
 </div>
 
-<!-- КАРТОЧКА 22: ОПТИМИЗАЦИЯ И СТАБИЛЬНОСТЬ -->
 <div class="log-entry major" data-tags="major logic stability" data-date="10.05.2026">
     <div class="log-header">
         <div>
@@ -534,7 +585,7 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </p>
 </div>
 
-<!-- КАРТОЧКА 19: СИСТЕМА ФРАКЦИЙ И КЛАНОВЫЕ АБИЛКИ -->
+
 <div class="log-entry major" data-tags="major logic vfx" data-date="10.05.2026">
     <div class="log-header">
         <div>
@@ -551,9 +602,7 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
         <b>Hero Abilities:</b> Начата разработка уникального контента для <b>Вагабонда</b> и <b>Баттосая</b>. Герои получают кастомные эффекты и способности, сравнимые с магическими техниками.
     </p>
 </div>
-
-<!-- КАРТОЧКА 20: ТЕХНИКА И ДОКТРИНЫ -->
-<div class="log-entry" data-tags="logic vfx combat" data-date="10.05.2026">
+    <div class="log-entry" data-tags="logic vfx combat" data-date="10.05.2026">
     <div class="log-header">
         <div>
             <span class="tag tag-logic">LOGIC</span>
@@ -598,67 +647,12 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </div>
     <h2>Tier System & Medical Logistics</h2>
     <p>
-        <b>Tier-Lock:</b> Внедрена 3-уровневая система зданий. Самураи теперь доступны только на Lvl 2+. ИИ автоматически улучшает постройки по таймеру.
-        <b>Smart Hospital:</b> Система «Честного таймера» (Flag 30) — юниты лечатся ровно 15 секунд. Улучшен автопилот: раненые сами находят путь в лазарет и возвращаются в строй.
-        <b>Smart Shopping:</b> Юниты посещают Кузницу только при наличии врагов на карте, сопровождая покупки сочным звуком монет. 
-        <b>Global Rebalance:</b> Стартовый капитал установлен на 250/250/250. Нерф специализаций стимулирует экспансию.
-    </p>
+    <b>Tier-Lock:</b> Внедрена 3-уровневая система зданий. Элитные самураи теперь доступны только на высоких уровнях Цитадели. ИИ автоматически улучшает постройки по внутреннему таймеру.
+    <b>Smart Hospital:</b> Система «Честного таймера» (Flag 30) — юниты лечатся ровно 15 секунд. Раненые бойцы сами находят путь в лазарет и автоматически возвращаются в строй после лечения.
+</p>
 </div>
 
-<!-- КАРТОЧКА 15: ЭКОНОМИЧЕСКАЯ РЕВОЛЮЦИЯ -->
-<div class="log-entry major" data-tags="major economic ai logic" data-date="10.05.2026">
-    <div class="log-header">
-        <div>
-            <span class="tag tag-major">MAJOR</span>
-            <span class="tag tag-economic">ECONOMIC</span>
-            <span class="tag tag-ai">AI</span>
-        </div>
-        <div class="entry-date">10.05.2026</div>
-    </div>
-    <h2 style="color: #38b000;">LABOR REVOLUTION: AI Smart Economy</h2>
-    <p>
-        <b>Labor Specialization:</b> Внедрена система <code>AI_AutoJobs</code>. Строители теперь динамически оценивают казну (Рис/Золото/Дерево) и сами выбирают роль. Фактор <code>rnd</code> убирает синхронность — рабочие ведут себя как живые люди.
-        <b>Stability & Performance:</b> Фикс <code>ResourceAntiDebt</code> жестко блокирует уход в минус. Все экономические триггеры переведены на <code>every8Frames</code>, что полностью устранило микро-фризы при сотнях рабочих.
-        <b>Anti-Glitch:</b> Радиус поиска ресурсов расширен до 2500px с жесткой фильтрацией <code>gold_source</code>.
-    </p>
-</div>
 
-<!-- КАРТОЧКА 16: СОДЕРЖАНИЕ И ПУТИ РАЗВИТИЯ -->
-<div class="log-entry" data-tags="logic economic building" data-date="10.05.2026">
-    <div class="log-header">
-        <div>
-            <span class="tag tag-logic">LOGIC</span>
-            <span class="tag tag-economic">ECONOMIC</span>
-            <span class="tag tag-building">BUILDING</span>
-        </div>
-        <div class="entry-date">10.05.2026</div>
-    </div>
-    <h2>Upkeep System & Forge Reformation</h2>
-    <p>
-        <b>Upkeep System:</b> Внедрено содержание войск. При дефиците ресурсов юниты получают дебафф <code>eco_starving</code> (−speed, −armour, +reload). Система защищена от отрицательных значений — списание только при наличии баланса.
-        <b>Forge Paths:</b> Реформа Кузницы. Введены три взаимоисключающих пути: <b>Воин / Мастер / Тень</b>. Логика переписана на <code>autoTrigger</code>, а ИИ теперь выбирает стратегию через <code>highPriority</code>. Технические дубликаты зданий полностью скрыты.
-    </p>
-</div>
-
-<!-- КАРТОЧКА 14: ФЛОТ И МОРСКАЯ ТАКТИКА -->
-<div class="log-entry" data-tags="ship logic ai economic" data-date="10.05.2026">
-    <div class="log-header">
-        <div>
-            <span class="tag tag-ship">SHIP</span>
-            <span class="tag tag-logic">LOGIC</span>
-            <span class="tag tag-economic">ECONOMIC</span>
-        </div>
-        <div class="entry-date">10.05.2026</div>
-    </div>
-    <h2>Amphib Lock & Naval Trade 2.0</h2>
-    <p>
-        <b>Amphib Lock:</b> Революция в механике десанта. Тяжелые суда (Heavy Bune) больше не являются «сухопутными танками». Реализовано ограничение мобильности при контакте с берегом — корабль может лишь частично зайти на землю для выгрузки, после чего система принудительно откатывает его в воду.
-        <b>Smart Unload:</b> ИИ теперь проверяет <code>isOverPassableTile</code> и инициирует высадку только при наличии врагов в радиусе 50/200.
-        <b>Economy & Wokou:</b> Внедрена система «Торговля 2.0» с автоматическим выбором маршрутов. Исправлены лагеря пиратов Вокоу: верфи теперь корректно спавнят элитных корсаров с десантом.
-    </p>
-</div>
-
-<!-- КАРТОЧКА 12: ЛОГИКА ВЫЖИВАНИЯ И НАСЛЕДИЕ -->
 <div class="log-entry major" data-tags="major logic ai legacy" data-date="10.05.2026">
     <div class="log-header">
         <div>
@@ -676,7 +670,7 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </p>
 </div>
 
-<!-- КАРТОЧКА 13: ХИРУРГИЧЕСКИЙ РЕБАЛАНС И КОД -->
+
 <div class="log-entry" data-tags="combat logic balance ai" data-date="10.05.2026">
     <div class="log-header">
         <div>
@@ -694,7 +688,6 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </p>
 </div>
 
-<!-- КАРТОЧКА 10: ТАКТИЧЕСКИЙ ИИ (SMART MICRO) -->
 <div class="log-entry major" data-tags="major ai logic combat" data-date="10.05.2026">
     <div class="log-header">
         <div>
@@ -711,7 +704,7 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </p>
 </div>
 
-<!-- КАРТОЧКА 11: БОЕВАЯ МЕХАНИКА И ГАРНИЗОНЫ -->
+
 <div class="log-entry" data-tags="logic combat building" data-date="10.05.2026">
     <div class="log-header">
         <div>
@@ -729,7 +722,6 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </p>
 </div>
 
-<!-- КАРТОЧКА 8: ЛИДЕРСТВО И АУРЫ -->
 <div class="log-entry" data-tags="logic ai combat" data-date="10.05.2026">
     <div class="log-header">
         <div>
@@ -744,7 +736,7 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </p>
 </div>
 
-<!-- КАРТОЧКА 9: АРМЕЙСКАЯ ИЕРАРХИЯ (REVOLUTION) -->
+
 <div class="log-entry major" data-tags="major ai logic" data-date="10.05.2026">
     <div class="log-header">
         <div>
@@ -755,11 +747,10 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
         <div class="entry-date">10.05.2026</div>
     </div>
     <h2 style="color: #ef233c;">ARMY LOGIC 3.0: Hierarchy & Psychology</h2>
-    <p>
-        <b>Chain of Command:</b> Тотальный снос старой системы следования. Юниты теперь образуют единый организм: копируют приказы лидера (атака цели, удержание позиции) и автоматически примыкают к строю (<code>JoinTheArmy</code>). 
-        <b>Psychology:</b> Внедрена система паники — при критических потерях лидер активирует статус <code>ai_panicked</code>, организуя тактическое отступление. 
-        <b>Optimization:</b> Логика переведена на дискретные кастомные таймеры (3-10с), что гарантирует стабильный FPS даже в масштабных сражениях.
-    </p>
+<p>
+    <b>Chain of Command 2.0:</b> Тотальный рефакторинг логики армейского строя. Юниты копируют приказы командира и автоматически примыкают к строю. Внедрена строгая проверка на приказы погрузки, исключающая сброс вейпоинтов у берега.
+    <b>Psychology & Panic:</b> При критических потерях в радиусе командира лидер активирует статус <code>ai_panicked</code>, организуя контролируемое тактическое отступление к ближайшей базе.
+</p>
 </div>
 
 <!-- КАРТОЧКА 6: АТМОСФЕРА И НЕБО -->
@@ -804,8 +795,8 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
             <span class="tag tag-major">MAJOR</span>
             <span class="tag tag-vfx">VFX</span>
             <span class="tag tag-logic">LOGIC</span>
-        </div>
-        <div class="entry-date">10.05.2026</div>
+    </div>
+                <div class="entry-date">10.05.2026</div>
     </div>
     <h2 style="color: #ffb703;">SEASON REVOLUTION: Autonomous Nature & Waves</h2>
     <p>
@@ -866,7 +857,6 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
     </p>
 </div>
 
-<div class="content">
     <div class="log-entry major" data-tags="major logic economic building" data-date="14.04.2026">
         <div class="log-header">
             <div>
@@ -885,11 +875,10 @@ p { margin: 0; font-size: 14px; color: #a0a0a0; line-height: 1.5; min-height: 1.
             Скорректированы веса приоритетов AI: теперь бот выстраивает стратегию развития, опираясь на актуальную технологическую ветку, а не на случайную выборку.
         </p>
     </div>
-</div>
-
 
 <script> 
 let searchTimer;
+let isInitialAnimationDone = false;
 
 function applyTagColors() {
     document.querySelectorAll('.tag').forEach(tag => {
@@ -920,7 +909,7 @@ function typeWrite(element, text, callback) {
         if (i < text.length) {
             element.innerHTML += text.charAt(i);
             i++;
-            element.typingTimer = setTimeout(type, 10); 
+            element.typingTimer = setTimeout(type, 15); 
         } else {
             element.classList.remove('typing');
             if (callback) callback();
@@ -930,6 +919,8 @@ function typeWrite(element, text, callback) {
 }
 
 function updateDisplay() {
+    if (!isInitialAnimationDone) return;
+
     const cards = document.querySelectorAll('.log-entry');
     const query = searchInput.value.toLowerCase().trim();
     let visibleCount = 0;
@@ -957,40 +948,111 @@ function updateDisplay() {
 
         if (manifestFound || (!isManifest && matchesSearch)) {            
             visibleCount++; 
-            if (card.style.display !== 'block' || card.dataset.lastState !== query) {
-                card.classList.remove('hidden');
-                card.style.display = 'block';
-                card.dataset.lastState = query;
+            card.classList.remove('hidden');
+            card.style.display = 'block';
+            card.classList.add('visible'); 
 
-                let tText = card.dataset.fullTitle;
-                let dText = card.dataset.fullDesc;
+            let tText = card.dataset.fullTitle;
+            let dText = card.dataset.fullDesc;
 
-                if (query !== "" && !isManifest) {
-                    const regex = new RegExp(`(${query})`, 'gi');
-                    tText = tText.replace(regex, '<span class="search-highlight">$1</span>');
-                    dText = dText.replace(regex, '<span class="search-highlight">$1</span>');
-                }
-
-                if (query.length > 0) {
-                    if (titleEl.typingTimer) clearTimeout(titleEl.typingTimer);
-                    if (descEl && descEl.typingTimer) clearTimeout(descEl.typingTimer);
-                    titleEl.innerHTML = tText;
-                    if (descEl) descEl.innerHTML = dText;
-                } else {
-                    typeWrite(titleEl, tText, () => {
-                        if (descEl) typeWrite(descEl, dText);
-                    });
-                }
+            if (query !== "" && !isManifest) {
+                const regex = new RegExp(`(${query})`, 'gi');
+                tText = tText.replace(regex, '<span class="search-highlight">$1</span>');
+                dText = dText.replace(regex, '<span class="search-highlight">$1</span>');
+                
+                if (titleEl.typingTimer) clearTimeout(titleEl.typingTimer);
+                if (descEl && descEl.typingTimer) clearTimeout(descEl.typingTimer);
+                titleEl.innerHTML = tText;
+                if (descEl) descEl.innerHTML = dText;
+            } else {
+                titleEl.innerHTML = tText;
+                if (descEl) descEl.innerHTML = dText;
             }
         } else {
             card.style.display = 'none';
             card.classList.add('hidden');
-            card.dataset.lastState = '';
             if (titleEl.typingTimer) clearTimeout(titleEl.typingTimer);
             if (descEl && descEl.typingTimer) clearTimeout(descEl.typingTimer);
         }
     });
     if (searchCount) searchCount.innerText = query.length > 0 ? 'Найдено: ' + visibleCount : '';
+}
+function startSequence() {
+    const cards = Array.from(document.querySelectorAll('.log-entry')).filter(c => !c.classList.contains('hidden-manifest'));
+    if (cards.length === 0) return;
+
+    const firstCard = cards[0];
+    const firstTitle = firstCard.querySelector('h2');
+    const firstDesc = firstCard.querySelector('p');
+
+    const originalTitle = firstTitle.innerText;
+    const originalDesc = firstDesc ? firstDesc.innerText : '';
+
+    firstCard.dataset.fullTitle = originalTitle;
+    firstCard.dataset.fullDesc = originalDesc;
+
+    firstTitle.innerHTML = '';
+    if (firstDesc) firstDesc.innerHTML = '';
+
+    cards.forEach(card => {
+        card.style.display = 'none';
+        card.classList.add('fade-in');
+    });
+
+    firstCard.style.display = 'block';
+    firstCard.classList.add('visible');
+
+    const placeholder = document.createElement('span');
+    placeholder.className = 'typing';
+    firstTitle.appendChild(placeholder);
+
+    let welcomeText = "hello";
+    let idx = 0;
+
+    function typeHello() {
+        if (idx < welcomeText.length) {
+            placeholder.innerText += welcomeText.charAt(idx);
+            idx++;
+            setTimeout(typeHello, 120);
+        } else {
+            setTimeout(eraseHello, 1000);
+        }
+    }
+
+    function eraseHello() {
+        if (placeholder.innerText.length > 0) {
+            placeholder.innerText = placeholder.innerText.substring(0, placeholder.innerText.length - 1);
+            setTimeout(eraseHello, 60);
+        } else {
+            setTimeout(startLogs, 400);
+        }
+    }
+
+    function startLogs() {
+        placeholder.remove();
+        
+        typeWrite(firstTitle, originalTitle, () => {
+            if (firstDesc) {
+                typeWrite(firstDesc, originalDesc, () => {
+                    cards.slice(1).forEach((card, index) => {
+                        card.style.display = 'block';
+                        setTimeout(() => {
+                            card.classList.add('visible');
+                        }, index * 150); 
+                    });
+                    isInitialAnimationDone = true;
+                });
+            } else {
+                cards.slice(1).forEach(card => {
+                    card.style.display = 'block';
+                    card.classList.add('visible');
+                });
+                isInitialAnimationDone = true;
+            }
+        });
+    }
+
+    setTimeout(typeHello, 1000);
 }
 
 if (searchInput) {
@@ -1002,10 +1064,19 @@ if (searchInput) {
 
 window.onload = () => {
     applyTagColors();
-    updateDisplay();
+    startSequence();
 };
 </script>
 
 
+
 </body>
 </html>
+
+
+    
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+} 
