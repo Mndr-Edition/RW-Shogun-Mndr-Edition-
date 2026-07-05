@@ -1,3 +1,8 @@
+
+!! сгенерированный ИИ, является сайт визиткой моего крупного мода на  rusted warfare!! 
+
+
+
 # 🏯 SHOGUN: MNDR EDITION — Официальный Чейнджлог & Программный Хаб
 
 [![Rusted Warfare Mod](https://img.shields.io/badge/Game-Rusted%20Warfare-green.svg)](https://corrodinggames.com/)
